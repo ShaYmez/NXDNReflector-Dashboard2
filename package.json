@@ -1,0 +1,21 @@
+{
+  "name": "nxdnreflector-dashboard2",
+  "version": "2.0.1",
+  "description": "Modern NXDNReflector Dashboard for NXDNReflector",
+  "scripts": {
+    "build:css": "npx tailwindcss -i ./src/styles.css -o ./assets/css/output.css --minify",
+    "watch:css": "npx tailwindcss -i ./src/styles.css -o ./assets/css/output.css --watch",
+    "dev": "npm run watch:css"
+  },
+  "keywords": [
+    "nxdn",
+    "reflector",
+    "dashboard",
+    "amateur-radio"
+  ],
+  "author": "ShaYmez",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "tailwindcss": "3.4.0"
+  }
+}
