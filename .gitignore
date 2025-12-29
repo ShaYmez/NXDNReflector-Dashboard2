@@ -20,13 +20,3 @@ Thumbs.db
 
 # Temporary files
 tmp/
-
-# Ignore logo files but keep the img directory structure
-img/*.png
-img/*.jpg
-img/*.jpeg
-img/*.bmp
-img/*.webp
-img/*.gif
-img/*.svg
-!img/README.md
