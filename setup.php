@@ -310,7 +310,7 @@ function createConfigLines() {
                 <!-- Footer -->
                 <div class="text-center mt-12 text-white/60 text-sm">
                     <p>NXDNReflector-Dashboard2 by ShaYmez</p>
-                    <p class="mt-2">Compatible with NXDNReflector & pNXDNReflector</p>
+                    <p class="mt-2">Compatible with NXDNReflector</p>
                 </div>
             </div>
         </div>
