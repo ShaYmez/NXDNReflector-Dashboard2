@@ -1,7 +1,7 @@
 <?php
 /**
  * NXDNReflector-Dashboard2 by M0VUB Aka ShaYmez - Main Dashboard
- * Responsive dashboard for NXDNReflector
+ * Responsive dashboard for NXDNReflector (G4KLX)
  * Copyright (C) 2025  Shane Daley, M0VUB Aka. ShaYmez
  */
 
