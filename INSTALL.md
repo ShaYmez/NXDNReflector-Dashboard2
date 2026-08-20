@@ -146,6 +146,10 @@ sudo chmod 755 /var/log/NXDNReflector
 sudo chmod 644 /var/log/NXDNReflector/*.log
 ```
 
+### Empty last heard / no linked repeaters (logrotate)
+
+G4KLX NXDNReflector usually writes `NXDNReflector-YYYY-MM-DD.log`. If you set `FileRotate=0` or use logrotate to a single `NXDNReflector.log`, the dashboard still finds that file automatically. Confirm `NXDNREFLECTORLOGPATH` and `NXDNREFLECTORLOGPREFIX` in `config/config.php` match your reflector `[Log]` `FilePath` / `FileRoot`.
+
 ### CSS Not Loading
 
 If styles are missing, rebuild the CSS:

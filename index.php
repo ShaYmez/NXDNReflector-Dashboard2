@@ -39,7 +39,7 @@ $sysInfo = getSystemInfo();
 $diskInfo = getDiskInfo();
 
 // Version info
-define("VERSION", "2.0.1");
+define("VERSION", "2.0.2");
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -53,7 +53,6 @@ define("VERSION", "2.0.1");
     <title><?php echo htmlspecialchars(defined("DASHBOARD_NAME") ? DASHBOARD_NAME : "NXDN Reflector Dashboard", ENT_QUOTES, 'UTF-8'); ?> - <?php $tg = getConfigItem("General", "TG", $configs); echo !empty($tg) ? "TG ".$tg : "NXDN"; ?></title>
     
     <link rel="stylesheet" href="assets/css/output.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body>
     <!-- Animated Background -->

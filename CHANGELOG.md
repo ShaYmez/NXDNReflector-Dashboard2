@@ -2,6 +2,17 @@
 
 All notable changes to NXDNReflector-Dashboard2 will be documented in this file.
 
+## [2.0.2] - 2026-08-20
+
+### Fixed
+- **Duplicate linked repeaters** — Stop merging older "Currently linked" dumps when the newest dump is at the end of the log, and dedupe by callsign / IP:port (ignores keepalive counters such as `2/60`).
+- **Logrotate / FileRotate=0** — Find `PREFIX-YYYY-MM-DD.log`, then `PREFIX.log`, then the newest `PREFIX-*.log` so the dashboard still works when logs are not date-stamped ([issue #1](https://github.com/ShaYmez/NXDNReflector-Dashboard2/issues/1)).
+
+### Removed
+- Unused Chart.js CDN include.
+
+---
+
 ## [2.0.1] - 2025-01-28
 
 ### Added
