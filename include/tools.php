@@ -1,8 +1,8 @@
 <?php
 /**
- * YSFReflector-Dashboard2 - Tools and Helper Functions
- * Modern dashboard for YSFReflector & pYSFReflector
- * Copyright (C) 2025  Shane Daley, M0VUB Aka. ShaYmez
+ * NXDNReflector-Dashboard2 - Tools and Helper Functions
+ * Modern dashboard for NXDNReflector
+ * Copyright (C) 2025-2026  Shane Daley, M0VUB Aka. ShaYmez
  */
 
 function format_time($seconds) {

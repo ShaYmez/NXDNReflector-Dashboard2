@@ -1,0 +1,10 @@
+# NXDNReflector-Dashboard2
+
+> Live status dashboard for G4KLX NXDNReflector amateur-radio talkgroups.
+
+This website is a web dashboard operators install next to NXDNReflector. It shows linked NXDN repeaters, last-heard callsigns, the current transmitter, and host CPU/disk stats. It is not a radio and does not carry voice traffic.
+
+- Project: https://github.com/ShaYmez/NXDNReflector-Dashboard2
+- License: GPL-3.0
+- Typical page: connected repeaters, last heard, system information
+- Config lives in /config/ (not public) after setup.php is removed

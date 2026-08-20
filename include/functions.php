@@ -2,7 +2,7 @@
 /**
  * NXDNReflector-Dashboard2 - Core Functions
  * Functions for reading and parsing NXDNReflector logs
- * Copyright (C) 2025  Shane Daley, M0VUB Aka. ShaYmez
+ * Copyright (C) 2025-2026  Shane Daley, M0VUB Aka. ShaYmez
  */
 
 // Constants for log parsing

@@ -2,7 +2,7 @@
 /**
  * NXDNReflector-Dashboard2 - Full Dashboard Data API
  * Returns all dashboard data for dynamic updates
- * Copyright (C) 2025  Shane Daley, M0VUB Aka. ShaYmez
+ * Copyright (C) 2025-2026  Shane Daley, M0VUB Aka. ShaYmez
  */
 
 // Load configuration and includes
@@ -105,7 +105,7 @@ for ($i = 0; $i < $lastHeardLimit; $i++) {
     $response['last_heard'][] = $heardItem;
 }
 
-// Gateway List
+// Repeater List
 foreach ($repeaters as $repeater) {
     $repeaterItem = [
         'timestamp' => convertTimezone($repeater['timestamp']),

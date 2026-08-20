@@ -1,35 +1,25 @@
-# NXDNReflector-Dashboard2 - Installation Guide
+# NXDNReflector-Dashboard2 — Installation Guide
+
+For **your own** G4KLX NXDNReflector (any talkgroup, any host). This is the official Dashboard2 used on FreeSTAR and by independent reflector operators.
 
 ## Prerequisites
 
-Before installing NXDNReflector-Dashboard2, ensure you have:
-
-- A working NXDNReflector installation
-- Web server (Apache, Nginx, or lighttpd)
-- PHP 7.4 or higher (tested up to PHP 8.3)
-- Node.js 16.x or higher
+- Linux (Debian/Ubuntu recommended)
+- Working **NXDNReflector** (G4KLX)
+- PHP 7.4–8.3 (`php`, `php-cli`, `php-mbstring`)
+- Node.js >= 16.x (to build CSS once)
+- Apache or Nginx
 - Git
 
-## Quick Installation
+## 1. Install packages (Debian/Ubuntu)
 
-### 1. Install Web Server and PHP
-
-#### Ubuntu/Debian:
 ```bash
 sudo apt update
-sudo apt install apache2 php php-cli php-mbstring php-xml git nodejs npm
-sudo systemctl enable apache2
-sudo systemctl start apache2
+sudo apt install -y apache2 php php-cli php-mbstring php-xml git nodejs npm
+# or: sudo apt install -y nginx php-fpm php-cli php-mbstring git nodejs npm
 ```
 
-#### CentOS/RHEL:
-```bash
-sudo yum install httpd php php-cli php-mbstring php-xml git nodejs npm
-sudo systemctl enable httpd
-sudo systemctl start httpd
-```
-
-### 2. Clone the Repository
+## 2. Clone
 
 ```bash
 cd /var/www/html
@@ -37,25 +27,30 @@ sudo git clone https://github.com/ShaYmez/NXDNReflector-Dashboard2.git
 cd NXDNReflector-Dashboard2
 ```
 
-### 3. Install Dependencies and Build
+Default branch is **`master`**.
+
+## 3. Build CSS
 
 ```bash
 sudo npm install
 sudo npm run build:css
 ```
 
-### 4. Set Permissions
+## 4. Permissions
 
 ```bash
 sudo chown -R www-data:www-data /var/www/html/NXDNReflector-Dashboard2
 sudo chmod -R 755 /var/www/html/NXDNReflector-Dashboard2
+sudo mkdir -p /var/www/html/NXDNReflector-Dashboard2/config
+sudo chown www-data:www-data /var/www/html/NXDNReflector-Dashboard2/config
+sudo chmod 775 /var/www/html/NXDNReflector-Dashboard2/config
 ```
 
-**Note**: Replace `www-data` with your web server user if different (e.g., `apache`, `nginx`, `http`).
+Replace `www-data` with `apache` / `nginx` if needed. **Do not use `chmod 777`.**
 
-### 5. Configure Web Server
+## 5. Virtual host
 
-#### Apache Configuration
+### Apache
 
 Create `/etc/apache2/sites-available/nxdn-dashboard.conf`:
 
@@ -63,25 +58,33 @@ Create `/etc/apache2/sites-available/nxdn-dashboard.conf`:
 <VirtualHost *:80>
     ServerName nxdn.yourdomain.com
     DocumentRoot /var/www/html/NXDNReflector-Dashboard2
-    
+
     <Directory /var/www/html/NXDNReflector-Dashboard2>
-        Options Indexes FollowSymLinks
+        Options -Indexes +FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
-    
+
+    <Directory /var/www/html/NXDNReflector-Dashboard2/config>
+        Require all denied
+    </Directory>
+    <Directory /var/www/html/NXDNReflector-Dashboard2/.git>
+        Require all denied
+    </Directory>
+
     ErrorLog ${APACHE_LOG_DIR}/nxdn-dashboard-error.log
     CustomLog ${APACHE_LOG_DIR}/nxdn-dashboard-access.log combined
 </VirtualHost>
 ```
 
-Enable the site:
 ```bash
 sudo a2ensite nxdn-dashboard
 sudo systemctl reload apache2
 ```
 
-#### Nginx Configuration
+Point DNS (or a hosts file) at this server, then open `http://nxdn.yourdomain.com/setup.php`.
+
+### Nginx
 
 Create `/etc/nginx/sites-available/nxdn-dashboard`:
 
@@ -90,135 +93,95 @@ server {
     listen 80;
     server_name nxdn.yourdomain.com;
     root /var/www/html/NXDNReflector-Dashboard2;
-    
     index index.php index.html;
-    
+
     location / {
         try_files $uri $uri/ =404;
     }
-    
+
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
-        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
     }
-    
-    location ~ /\.ht {
+
+    location ~ /\.(git|ht) {
+        deny all;
+    }
+
+    location ^~ /config/ {
+        deny all;
+    }
+
+    location ^~ /include/ {
         deny all;
     }
 }
 ```
 
-Enable the site:
+Adjust the PHP-FPM socket to your version (`php7.4-fpm.sock`, `php8.3-fpm.sock`, …).
+
 ```bash
 sudo ln -s /etc/nginx/sites-available/nxdn-dashboard /etc/nginx/sites-enabled/
-sudo systemctl reload nginx
+sudo nginx -t && sudo systemctl reload nginx
 ```
 
-### 6. Initial Configuration
+## 6. Setup wizard
 
-1. Open your web browser and navigate to `http://nxdn.yourdomain.com/setup.php`
-2. Complete the setup wizard with your NXDNReflector configuration
-3. Click "Save Configuration"
-4. **Important**: Delete the setup file for security:
+1. Browse to `http://nxdn.yourdomain.com/setup.php`
+2. Set dashboard name, tagline, logo, log path, and `NXDNReflector.ini` path
+3. Save, then **delete setup.php**:
 
 ```bash
 sudo rm /var/www/html/NXDNReflector-Dashboard2/setup.php
 ```
 
-## Troubleshooting
+NXDNReflector logs (dated or logrotate) are both supported:
 
-### Permission Issues
-
-If you encounter permission errors:
-
-```bash
-sudo chown -R www-data:www-data /var/www/html/NXDNReflector-Dashboard2
-sudo chmod -R 755 /var/www/html/NXDNReflector-Dashboard2
-sudo chmod -R 777 /var/www/html/NXDNReflector-Dashboard2/config
+```ini
+[Log]
+FilePath=/var/log/NXDNReflector/
+FileRoot=NXDNReflector
+FileRotate=1
 ```
 
-### Log File Access Issues
+The web user must be able to **read** that directory.
 
-Ensure the web server can read NXDNReflector log files:
-
-```bash
-sudo chmod 755 /var/log/NXDNReflector
-sudo chmod 644 /var/log/NXDNReflector/*.log
-```
-
-### Empty last heard / no linked repeaters (logrotate)
-
-G4KLX NXDNReflector usually writes `NXDNReflector-YYYY-MM-DD.log`. If you set `FileRotate=0` or use logrotate to a single `NXDNReflector.log`, the dashboard still finds that file automatically. Confirm `NXDNREFLECTORLOGPATH` and `NXDNREFLECTORLOGPREFIX` in `config/config.php` match your reflector `[Log]` `FilePath` / `FileRoot`.
-
-### CSS Not Loading
-
-If styles are missing, rebuild the CSS:
+## HTTPS
 
 ```bash
-cd /var/www/html/NXDNReflector-Dashboard2
-sudo npm run build:css
-```
-
-### Dashboard Shows "Config Not Found"
-
-1. Ensure `config/config.php` exists
-2. Check file permissions
-3. Rerun the setup wizard at `setup.php`
-
-## SSL/HTTPS Configuration (Recommended)
-
-### Using Let's Encrypt
-
-```bash
-sudo apt install certbot python3-certbot-apache
+sudo apt install -y certbot python3-certbot-apache   # or python3-certbot-nginx
 sudo certbot --apache -d nxdn.yourdomain.com
-```
-
-For Nginx:
-```bash
-sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d nxdn.yourdomain.com
 ```
 
 ## Updating
 
-To update the dashboard to the latest version:
+Always pull **`master`** as the owner of the clone (usually root), then restore `www-data` ownership. That avoids `fatal: detected dubious ownership` and `cannot open '.git/FETCH_HEAD': Permission denied`.
 
 ```bash
 cd /var/www/html/NXDNReflector-Dashboard2
-sudo git pull origin main
+sudo git pull origin master
 sudo npm install
 sudo npm run build:css
+sudo chown -R www-data:www-data .
+sudo rm -f setup.php
 ```
 
-## Advanced Configuration
+If git still complains about ownership:
 
-### Custom Logo
-
-Place your logo in `img/logo.png` or configure in `config/config.php`:
-
-```php
-define("LOGO", "https://example.com/your-logo.png");
+```bash
+sudo git config --global --add safe.directory /var/www/html/NXDNReflector-Dashboard2
 ```
 
-### Timezone Configuration
+## Layout options (`config/config.php`)
 
-Edit `config/config.php`:
-
-```php
-define("TIMEZONE", "America/New_York");
-```
-
-### GDPR Compliance
-
-Enable callsign anonymization in `config/config.php`:
+Live tables refresh every 5 seconds in the browser (`REFRESHAFTER` is unused).
 
 ```php
-define("GDPR", true);
+define("LAST_HEARD_FIRST", true);   // last heard above linked list
+define("SHOW_SYSTEM_INFO", false);  // hide uptime / load panel
 ```
 
 ## Support
 
-For issues and questions:
-- GitHub Issues: https://github.com/ShaYmez/NXDNReflector-Dashboard2/issues
-- Documentation: https://github.com/ShaYmez/NXDNReflector-Dashboard2
+- Issues: https://github.com/ShaYmez/NXDNReflector-Dashboard2/issues
+- Live example: https://nxdn.freestar.network

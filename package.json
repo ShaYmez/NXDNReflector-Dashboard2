@@ -1,6 +1,6 @@
 {
   "name": "nxdnreflector-dashboard2",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "Modern NXDNReflector Dashboard for NXDNReflector",
   "scripts": {
     "build:css": "npx tailwindcss -i ./src/styles.css -o ./assets/css/output.css --minify",

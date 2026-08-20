@@ -2,7 +2,7 @@
 
 Modern web application dashboard for viewing connected repeaters, active users, and system statistics for NXDNReflector.
 
-Version 2.0.2 Official
+Version 2.0.3 Official
 
 ![License](https://img.shields.io/badge/license-GPL--3.0-blue.svg)
 ![PHP](https://img.shields.io/badge/PHP-7.4%20%7C%208.x-purple.svg)
@@ -26,7 +26,7 @@ Version 2.0.2 Official
 ![NXDNReflector-Dashboard2 Screenshot](./assets/ss/img/Screenshot-2025.png)
 - [LIVE!](https://nxdn.freestar.network)
 
-*Dashboard showing real-time connection with P25Reflector, including connected repeaters, system information, and last heard list*
+*Dashboard showing a live NXDNReflector: linked repeaters, system information, and last heard*
 
 ## Installation
 
@@ -78,7 +78,7 @@ Create a virtual host configuration:
     DocumentRoot /var/www/html/NXDNReflector-Dashboard2
     
     <Directory /var/www/html/NXDNReflector-Dashboard2>
-        Options Indexes FollowSymLinks
+        Options -Indexes +FollowSymLinks
         AllowOverride All
         Require all granted
     </Directory>
@@ -174,7 +174,7 @@ define("DASHBOARD_NAME", "My NXDN Reflector");
 define("LOGO", "https://example.com/logo.png"); // URL or local path
 ```
 
-**Note**: The `REFRESHAFTER` setting is now deprecated as the dashboard uses JavaScript for live updates and no longer requires page refreshes.
+**Note**: `REFRESHAFTER`, `SHOWOLDMHEARD`, and `SHOWPROGRESSBARS` are unused (live poll is 5 seconds). Optional layout: `LAST_HEARD_FIRST`, `SHOW_SYSTEM_INFO` — see INSTALL.md. Default branch is **master**.
 
 ### Logo Configuration
 
@@ -272,7 +272,7 @@ To update the dashboard:
 
 ```bash
 cd /var/www/html/NXDNReflector-Dashboard2
-git pull origin main
+sudo git pull origin master
 npm install
 npm run build:css
 ```
